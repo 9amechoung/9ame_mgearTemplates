@@ -338,8 +338,10 @@ def _channels(node):
 def _set(plug, value):
     # 키가 있는 속성은 현재 프레임에 키로 넣는다(mGear 미러는 키 있는
     # 속성을 건너뛰어서 키 작업 중에는 미러가 안 먹는다).
-    if cmds.getAttr(plug, lock=True):
-        return False
+    # 잠겼거나 키를 줄 수 없는 채널은 리그가 막아 둔 것이라 조용히 건너뛴다(None).
+    # 다른 노드(constraint 등)에 연결돼 값을 못 넣는 경우만 False.
+    if cmds.getAttr(plug, lock=True) or not cmds.getAttr(plug, keyable=True):
+        return None
     sources = cmds.listConnections(plug, source=True, destination=False,
                                    skipConversionNodes=True) or []
     if sources:
@@ -375,14 +377,14 @@ def _mirror(nodes, flip=False):
                 if not cmds.objExists(plug):
                     continue
                 try:
-                    if not _set(plug, value):
+                    if _set(plug, value) is False:
                         failed.append(plug)
                 except Exception:
                     failed.append(plug)
     finally:
         cmds.undoInfo(closeChunk=True)
     if failed:
-        cmds.warning("Anim Picker: skipped {} locked/connected attributes: {}"
+        cmds.warning("Anim Picker: skipped {} connected attributes: {}"
                      .format(len(failed), ", ".join(failed[:10])))
 
 
