@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1082" height="1195" viewBox="0 0 676 747" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1082" height="1250" viewBox="0 0 676 781" font-family="Segoe UI, Helvetica, Arial, sans-serif">
 <rect width="100%" height="100%" fill="#444444"/>
-<clipPath id="clip140623415449792"><rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip139672909618560"><rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
-<rect x="138.0" y="24.0" width="400.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140623415449792)"/>
+<rect x="138.0" y="24.0" width="400.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip139672909618560)"/>
 <text x="144.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">BODY</text>
-<clipPath id="clip140623414308736"><rect x="24.0" y="657.0" width="628.0" height="66.0" rx="10.0"/></clipPath>
-<rect x="24.0" y="657.0" width="628.0" height="66.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
-<rect x="24.0" y="657.0" width="628.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140623414308736)"/>
+<clipPath id="clip139672907856448"><rect x="24.0" y="657.0" width="628.0" height="100.0" rx="10.0"/></clipPath>
+<rect x="24.0" y="657.0" width="628.0" height="100.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
+<rect x="24.0" y="657.0" width="628.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip139672907856448)"/>
 <text x="30.0" y="666.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">TOOLS</text>
-<clipPath id="clip140623414308032"><rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip139672907849728"><rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0" fill="rgb(255,84,96)" fill-opacity="0.11" stroke="rgb(255,84,96)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="24.0" y="24.0" width="104.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip140623414308032)"/>
+<rect x="24.0" y="24.0" width="104.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip139672907849728)"/>
 <text x="30.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">RIGHT  (R)</text>
 <text x="34.00" y="64.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">ARM</text>
 <polygon points="109.00,73.00 113.50,74.21 116.79,77.50 118.00,82.00 118.00,82.00 116.79,86.50 113.50,89.79 109.00,91.00 43.00,91.00 38.50,89.79 35.21,86.50 34.00,82.00 34.00,82.00 35.21,77.50 38.50,74.21 43.00,73.00" fill="rgb(255,84,96)" fill-opacity="0.92"/>
@@ -43,9 +43,9 @@
 <text x="34.00" y="562.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">HAND</text>
 <polygon points="109.00,571.00 113.50,572.21 116.79,575.50 118.00,580.00 118.00,580.00 116.79,584.50 113.50,587.79 109.00,589.00 43.00,589.00 38.50,587.79 35.21,584.50 34.00,580.00 34.00,580.00 35.21,575.50 38.50,572.21 43.00,571.00" fill="rgb(255,84,96)" fill-opacity="0.92"/>
 <text x="76.00" y="580.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">All Fingers</text>
-<clipPath id="clip140623414305792"><rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip139672908066048"><rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0" fill="rgb(61,139,255)" fill-opacity="0.11" stroke="rgb(61,139,255)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="548.0" y="24.0" width="104.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip140623414305792)"/>
+<rect x="548.0" y="24.0" width="104.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip139672908066048)"/>
 <text x="554.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">LEFT  (L)</text>
 <text x="558.00" y="64.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">ARM</text>
 <polygon points="633.00,73.00 637.50,74.21 640.79,77.50 642.00,82.00 642.00,82.00 640.79,86.50 637.50,89.79 633.00,91.00 567.00,91.00 562.50,89.79 559.21,86.50 558.00,82.00 558.00,82.00 559.21,77.50 562.50,74.21 567.00,73.00" fill="rgb(61,139,255)" fill-opacity="0.92"/>
@@ -181,4 +181,12 @@
 <text x="458.00" y="698.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Reset Selected</text>
 <polygon points="619.00,685.00 625.50,686.74 630.26,691.50 632.00,698.00 632.00,698.00 630.26,704.50 625.50,709.26 619.00,711.00 537.00,711.00 530.50,709.26 525.74,704.50 524.00,698.00 524.00,698.00 525.74,691.50 530.50,686.74 537.00,685.00" fill="rgb(191,76,84)" fill-opacity="1.00"/>
 <text x="578.00" y="698.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Reset All</text>
+<polygon points="199.00,719.00 205.50,720.74 210.26,725.50 212.00,732.00 212.00,732.00 210.26,738.50 205.50,743.26 199.00,745.00 117.00,745.00 110.50,743.26 105.74,738.50 104.00,732.00 104.00,732.00 105.74,725.50 110.50,720.74 117.00,719.00" fill="rgb(59,66,82)" fill-opacity="1.00"/>
+<text x="158.00" y="732.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Copy L → R</text>
+<polygon points="319.00,719.00 325.50,720.74 330.26,725.50 332.00,732.00 332.00,732.00 330.26,738.50 325.50,743.26 319.00,745.00 237.00,745.00 230.50,743.26 225.74,738.50 224.00,732.00 224.00,732.00 225.74,725.50 230.50,720.74 237.00,719.00" fill="rgb(59,66,82)" fill-opacity="1.00"/>
+<text x="278.00" y="732.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Copy R → L</text>
+<polygon points="439.00,719.00 445.50,720.74 450.26,725.50 452.00,732.00 452.00,732.00 450.26,738.50 445.50,743.26 439.00,745.00 357.00,745.00 350.50,743.26 345.74,738.50 344.00,732.00 344.00,732.00 345.74,725.50 350.50,720.74 357.00,719.00" fill="rgb(59,66,82)" fill-opacity="1.00"/>
+<text x="398.00" y="732.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Mirror Selected</text>
+<polygon points="559.00,719.00 565.50,720.74 570.26,725.50 572.00,732.00 572.00,732.00 570.26,738.50 565.50,743.26 559.00,745.00 477.00,745.00 470.50,743.26 465.74,738.50 464.00,732.00 464.00,732.00 465.74,725.50 470.50,720.74 477.00,719.00" fill="rgb(59,66,82)" fill-opacity="1.00"/>
+<text x="518.00" y="732.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Flip Selected</text>
 </svg>

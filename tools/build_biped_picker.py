@@ -297,6 +297,78 @@ if not __INIT__:
 '''
 
 
+_MIRROR_FUNC = '''
+import re
+from mgear.core import anim_utils
+
+_SIDE = re.compile(r"_([LR])(\\d+)_")
+
+
+def _other(node):
+    swap = {"L": "R", "R": "L"}
+    return _SIDE.sub(lambda m: "_{}{}_".format(swap[m.group(1)], m.group(2)),
+                     node, count=1)
+
+
+def _mirror(nodes, flip=False):
+    # mGear mirrorPose 후, 값이 바뀐 컨트롤에 키를 찍는다(Auto Key 켜져 있을 때).
+    # 키가 있는 컨트롤은 키를 찍지 않으면 프레임 이동 시 값이 되돌아간다.
+    if not nodes:
+        cmds.warning("Anim Picker: nothing to mirror")
+        return
+    targets = set(_other(n) for n in nodes)
+    if flip:
+        targets.update(nodes)
+    cmds.undoInfo(openChunk=True)
+    try:
+        anim_utils.mirrorPose(flip=flip, nodes=nodes)
+        if cmds.autoKeyframe(q=True, state=True):
+            keyed = [n for n in targets if cmds.objExists(n)]
+            if keyed:
+                cmds.setKeyframe(keyed)
+    finally:
+        cmds.undoInfo(closeChunk=True)
+
+
+def _copy_side(side, parts):
+    # side 쪽 컨트롤(parts 컴포넌트)의 포즈를 반대쪽에 복사한다.
+    namespace = _namespace()
+    pattern = "*_{}*_ctl".format(side)
+    if namespace:
+        pattern = "{}:{}".format(namespace, pattern)
+    nodes = []
+    for node in cmds.ls(pattern, type="transform") or []:
+        short = node.split("|")[-1].split(":")[-1]
+        match = _SIDE.search(short)
+        if match and match.group(1) == side and short.split("_")[0] in parts:
+            nodes.append(node)
+    _mirror(nodes)
+'''
+
+LIMB_PARTS = ("arm", "armUI", "shoulder", "finger", "thumb", "thumbRoll",
+              "meta", "leg", "legUI", "foot")
+HAND_PARTS = ("finger", "thumb", "thumbRoll", "meta")
+
+
+def script_copy_side(side, parts):
+    """side(L/R) 의 팔·다리(또는 손) 포즈를 반대쪽에 복사."""
+    return _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _copy_side({!r}, {!r})
+'''.format(side, parts)
+
+
+SCRIPT_MIRROR_SEL = _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _mirror(cmds.ls(sl=True) or [])
+'''
+
+SCRIPT_FLIP_SEL = _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _mirror(cmds.ls(sl=True) or [], flip=True)
+'''
+
+
 def script_ikfk(limb, side):
     """mGear anim_utils 의 IK/FK 매칭 (클릭 시 현재 상태의 반대로 전환+매칭)."""
     ik_rot = (',\n        ik_rot="arm_{}_ikRot_ctl"'.format(side)
@@ -452,7 +524,7 @@ def build_body_tab():
     # ---- 패널 (가장 먼저 = 가장 뒤에 그려짐)
     items += [
         panel("BODY", (0, -6), 400, 624, COLOR["panel"]),
-        panel("TOOLS", (0, -360), 628, 66, COLOR["panel"]),
+        panel("TOOLS", (0, -377), 628, 100, COLOR["panel"]),
     ]
     items += build_side_panel("R0", -1) + build_side_panel("L0", 1)
 
@@ -531,6 +603,15 @@ def build_body_tab():
     for i, (text, script, color, tcolor) in enumerate(tools):
         items.append(button(text, (-240 + i * 120, -368), script, w=108,
                             h=26, color=color, text_color=tcolor, size=8))
+    mirror_tools = [
+        ("Copy L \u2192 R", script_copy_side("L", LIMB_PARTS)),
+        ("Copy R \u2192 L", script_copy_side("R", LIMB_PARTS)),
+        ("Mirror Selected", SCRIPT_MIRROR_SEL),
+        ("Flip Selected", SCRIPT_FLIP_SEL),
+    ]
+    for i, (text, script) in enumerate(mirror_tools):
+        items.append(button(text, (-180 + i * 120, -402), script, w=108,
+                            h=26, size=8))
     return items
 
 
@@ -597,8 +678,12 @@ def build_hands_tab():
     items += build_hand("L0", 1, 150)
     items += [
         panel("TOOLS", (0, -206), 580, 50, COLOR["panel"]),
-        button("Key Selected", (-60, -214), SCRIPT_KEY_SEL, w=108, h=24),
-        button("Reset Selected", (60, -214), SCRIPT_RESET_SEL, w=108, h=24),
+        button("Hand L \u2192 R", (-180, -214),
+               script_copy_side("L", HAND_PARTS), w=108, h=24),
+        button("Hand R \u2192 L", (-60, -214),
+               script_copy_side("R", HAND_PARTS), w=108, h=24),
+        button("Key Selected", (60, -214), SCRIPT_KEY_SEL, w=108, h=24),
+        button("Reset Selected", (180, -214), SCRIPT_RESET_SEL, w=108, h=24),
     ]
     return items
 
