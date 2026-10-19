@@ -369,6 +369,8 @@ def _mirror(nodes, flip=False):
         if flip and target != node and target not in nodes:
             entries.append((node, _channels(target)))
     failed = []
+    keyed = []
+    changed = []
     cmds.undoInfo(openChunk=True)
     try:
         for target, channels in entries:
@@ -377,12 +379,22 @@ def _mirror(nodes, flip=False):
                 if not cmds.objExists(plug):
                     continue
                 try:
-                    if _set(plug, value) is False:
+                    before = cmds.getAttr(plug)
+                    result = _set(plug, value)
+                    if result is False:
                         failed.append(plug)
-                except Exception:
-                    failed.append(plug)
+                    elif result and abs(before - value) > 1e-6:
+                        changed.append(plug)
+                        if cmds.keyframe(plug, q=True, keyframeCount=True):
+                            keyed.append(plug)
+                except Exception as e:
+                    failed.append("{} ({})".format(plug, e))
     finally:
         cmds.undoInfo(closeChunk=True)
+    print("Anim Picker mirror: {} controls -> {} targets, {} values changed "
+          "({} keyed): {}".format(
+              len(nodes), len(entries), len(changed), len(keyed),
+              ", ".join(changed[:8])))
     if failed:
         cmds.warning("Anim Picker: skipped {} connected attributes: {}"
                      .format(len(failed), ", ".join(failed[:10])))
