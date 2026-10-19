@@ -299,9 +299,10 @@ if not __INIT__:
 
 _MIRROR_FUNC = '''
 import re
-from mgear.core import anim_utils
 
 _SIDE = re.compile(r"_([LR])(\\d+)_")
+_TRANSFORM = ("tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz")
+_SKIP = ("isRig", "uiHost", "_ctl")
 
 
 def _other(node):
@@ -310,24 +311,79 @@ def _other(node):
                      node, count=1)
 
 
+def _channels(node):
+    # mGear 미러와 같은 채널: 트랜스폼 + 숫자형 유저 속성 (inv* 등 제외).
+    # 반전 여부는 컨트롤의 inv<Attr> 속성(mGear 가 빌드 시 기록)을 따른다.
+    user = cmds.listAttr(node, userDefined=True, keyable=True) or []
+    result = []
+    for attr in _TRANSFORM + tuple(user):
+        if attr.startswith("inv") or any(k in attr for k in _SKIP):
+            continue
+        plug = "{}.{}".format(node, attr)
+        try:
+            value = cmds.getAttr(plug)
+        except Exception:
+            continue
+        if isinstance(value, bool):
+            value = int(value)
+        if not isinstance(value, (int, float)):
+            continue
+        inv = "{}.inv{}".format(node, attr.lower().capitalize())
+        if cmds.objExists(inv) and cmds.getAttr(inv):
+            value = -value
+        result.append((attr, value))
+    return result
+
+
+def _set(plug, value):
+    # 키가 있는 속성은 현재 프레임에 키로 넣는다(mGear 미러는 키 있는
+    # 속성을 건너뛰어서 키 작업 중에는 미러가 안 먹는다).
+    if cmds.getAttr(plug, lock=True):
+        return False
+    sources = cmds.listConnections(plug, source=True, destination=False,
+                                   skipConversionNodes=True) or []
+    if sources:
+        if all(cmds.nodeType(n).startswith("animCurve") for n in sources):
+            cmds.setKeyframe(plug, value=value)
+            return True
+        return False
+    cmds.setAttr(plug, value)
+    return True
+
+
 def _mirror(nodes, flip=False):
-    # mGear mirrorPose 후, 값이 바뀐 컨트롤에 키를 찍는다(Auto Key 켜져 있을 때).
-    # 키가 있는 컨트롤은 키를 찍지 않으면 프레임 이동 시 값이 되돌아간다.
     if not nodes:
         cmds.warning("Anim Picker: nothing to mirror")
         return
-    targets = set(_other(n) for n in nodes)
-    if flip:
-        targets.update(nodes)
+    # 값을 모두 읽은 뒤에 쓴다 (Flip 시 양쪽이 서로의 원래 값을 받도록)
+    entries = []
+    nodes = [n for n in dict.fromkeys(nodes)
+             if n.endswith("_ctl") or cmds.objExists(n + ".isCtl")]
+    for node in nodes:
+        target = _other(node)
+        if not cmds.objExists(target):
+            continue
+        entries.append((target, _channels(node)))
+        if flip and target != node and target not in nodes:
+            entries.append((node, _channels(target)))
+    failed = []
     cmds.undoInfo(openChunk=True)
     try:
-        anim_utils.mirrorPose(flip=flip, nodes=nodes)
-        if cmds.autoKeyframe(q=True, state=True):
-            keyed = [n for n in targets if cmds.objExists(n)]
-            if keyed:
-                cmds.setKeyframe(keyed)
+        for target, channels in entries:
+            for attr, value in channels:
+                plug = "{}.{}".format(target, attr)
+                if not cmds.objExists(plug):
+                    continue
+                try:
+                    if not _set(plug, value):
+                        failed.append(plug)
+                except Exception:
+                    failed.append(plug)
     finally:
         cmds.undoInfo(closeChunk=True)
+    if failed:
+        cmds.warning("Anim Picker: skipped {} locked/connected attributes: {}"
+                     .format(len(failed), ", ".join(failed[:10])))
 
 
 def _copy_side(side, parts):
