@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1005" height="725" viewBox="0 0 628 453" font-family="Segoe UI, Helvetica, Arial, sans-serif">
 <rect width="100%" height="100%" fill="#444444"/>
-<clipPath id="clip139704343711296"><rect x="24.0" y="24.0" width="280.0" height="320.0" rx="10.0"/></clipPath>
+<clipPath id="clip140165340613760"><rect x="24.0" y="24.0" width="280.0" height="320.0" rx="10.0"/></clipPath>
 <rect x="24.0" y="24.0" width="280.0" height="320.0" rx="10.0" fill="rgb(255,84,96)" fill-opacity="0.11" stroke="rgb(255,84,96)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="24.0" y="24.0" width="280.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip139704343711296)"/>
+<rect x="24.0" y="24.0" width="280.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip140165340613760)"/>
 <text x="30.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">RIGHT HAND  (R)</text>
 <polygon points="188.00,226.00 196.00,228.14 201.86,234.00 204.00,242.00 204.00,274.00 201.86,282.00 196.00,287.86 188.00,290.00 104.00,290.00 96.00,287.86 90.14,282.00 88.00,274.00 88.00,242.00 90.14,234.00 96.00,228.14 104.00,226.00" fill="rgb(255,84,96)" fill-opacity="0.92"/>
 <text x="146.00" y="258.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">meta</text>
@@ -36,9 +36,9 @@
 <text x="212.00" y="320.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">All Fingers</text>
 <polygon points="140.00,310.00 145.00,311.34 148.66,315.00 150.00,320.00 150.00,320.00 148.66,325.00 145.00,328.66 140.00,330.00 60.00,330.00 55.00,328.66 51.34,325.00 50.00,320.00 50.00,320.00 51.34,315.00 55.00,311.34 60.00,310.00" fill="rgb(94,196,164)" fill-opacity="1.00"/>
 <text x="100.00" y="320.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">Key Fingers</text>
-<clipPath id="clip139704343795008"><rect x="324.0" y="24.0" width="280.0" height="320.0" rx="10.0"/></clipPath>
+<clipPath id="clip140165340697472"><rect x="324.0" y="24.0" width="280.0" height="320.0" rx="10.0"/></clipPath>
 <rect x="324.0" y="24.0" width="280.0" height="320.0" rx="10.0" fill="rgb(61,139,255)" fill-opacity="0.11" stroke="rgb(61,139,255)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="324.0" y="24.0" width="280.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip139704343795008)"/>
+<rect x="324.0" y="24.0" width="280.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip140165340697472)"/>
 <text x="330.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">LEFT HAND  (L)</text>
 <polygon points="524.00,226.00 532.00,228.14 537.86,234.00 540.00,242.00 540.00,274.00 537.86,282.00 532.00,287.86 524.00,290.00 440.00,290.00 432.00,287.86 426.14,282.00 424.00,274.00 424.00,242.00 426.14,234.00 432.00,228.14 440.00,226.00" fill="rgb(61,139,255)" fill-opacity="0.92"/>
 <text x="482.00" y="258.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">meta</text>
@@ -72,9 +72,9 @@
 <text x="416.00" y="320.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">All Fingers</text>
 <polygon points="568.00,310.00 573.00,311.34 576.66,315.00 578.00,320.00 578.00,320.00 576.66,325.00 573.00,328.66 568.00,330.00 488.00,330.00 483.00,328.66 479.34,325.00 478.00,320.00 478.00,320.00 479.34,315.00 483.00,311.34 488.00,310.00" fill="rgb(94,196,164)" fill-opacity="1.00"/>
 <text x="528.00" y="320.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">Key Fingers</text>
-<clipPath id="clip139704341765184"><rect x="24.0" y="379.0" width="580.0" height="50.0" rx="10.0"/></clipPath>
+<clipPath id="clip140165338667648"><rect x="24.0" y="379.0" width="580.0" height="50.0" rx="10.0"/></clipPath>
 <rect x="24.0" y="379.0" width="580.0" height="50.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
-<rect x="24.0" y="379.0" width="580.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip139704341765184)"/>
+<rect x="24.0" y="379.0" width="580.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140165338667648)"/>
 <text x="30.0" y="388.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">TOOLS</text>
 <polygon points="296.00,400.00 302.00,401.61 306.39,406.00 308.00,412.00 308.00,412.00 306.39,418.00 302.00,422.39 296.00,424.00 212.00,424.00 206.00,422.39 201.61,418.00 200.00,412.00 200.00,412.00 201.61,406.00 206.00,401.61 212.00,400.00" fill="rgb(59,66,82)" fill-opacity="1.00"/>
 <text x="254.00" y="412.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(240,242,245)">Key Selected</text>

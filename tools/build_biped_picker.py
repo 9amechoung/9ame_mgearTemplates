@@ -171,12 +171,35 @@ def _ns(name):
     return "{}:{}".format(__NAMESPACE__, name) if __NAMESPACE__ else name
 
 
+def _flatten_set(node, seen):
+    result = []
+    for member in cmds.sets(node, q=True) or []:
+        if cmds.nodeType(member) == "objectSet":
+            if member not in seen:
+                seen.add(member)
+                result += _flatten_set(member, seen)
+        else:
+            result.append(member)
+    return result
+
+
 def _all_controls():
-    grp = _ns("rig_controllers_grp")
-    if not cmds.objExists(grp):
-        cmds.warning("Anim Picker: '{}' set not found".format(grp))
-        return []
-    return cmds.sets(grp, q=True) or []
+    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)
+    sets = cmds.ls(_ns("*_controllers_grp"), type="objectSet") or []
+    ctls = []
+    seen = set(sets)
+    for s in sets:
+        ctls += _flatten_set(s, seen)
+    # 2) fallback: mGear controls carry an "isCtl" attribute
+    if not ctls:
+        ctls = cmds.ls(_ns("*.isCtl"), objectsOnly=True) or []
+    # 3) fallback: transforms named *_ctl
+    if not ctls:
+        ctls = cmds.ls(_ns("*_ctl"), type="transform") or []
+    if not ctls:
+        cmds.warning("Anim Picker: no controls found in namespace '{}'"
+                     .format(__NAMESPACE__ or ""))
+    return list(dict.fromkeys(ctls))
 '''
 
 _RESET_FUNC = '''
