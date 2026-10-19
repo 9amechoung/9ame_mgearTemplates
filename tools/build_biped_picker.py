@@ -164,11 +164,35 @@ def panel(title, center, w, h, color=COLOR["panel"]):
 #   __CONTROLS__, __FLATCONTROLS__
 #   __INIT__ 이 True 일 때(피커 로드 시)는 실행하지 않도록 가드한다.
 # --------------------------------------------------------------------------
-_GET_ALL_CTLS = '''import maya.cmds as cmds
+_NAMESPACE_FUNC = '''import maya.cmds as cmds
 
 
-def _ns(name):
-    return "{}:{}".format(__NAMESPACE__, name) if __NAMESPACE__ else name
+def _namespace():
+    # 피커에 네임스페이스가 지정되지 않았으면 선택한 노드에서,
+    # 그래도 없으면 씬에 컨트롤러 셋이 있는 네임스페이스가 하나뿐일 때 그것을 쓴다.
+    if __NAMESPACE__:
+        return __NAMESPACE__
+    sel = cmds.ls(sl=True) or []
+    if sel:
+        return sel[0].split("|")[-1].rpartition(":")[0]
+    if cmds.ls("*_controllers_grp", type="objectSet"):
+        return ""
+    found = sorted(set(
+        s.rpartition(":")[0] for s in
+        cmds.ls("*:*_controllers_grp", type="objectSet", recursive=True) or []))
+    if len(found) == 1:
+        return found[0]
+    if len(found) > 1:
+        cmds.warning("Anim Picker: several rigs found ({}). Pick the namespace "
+                     "in the picker or select a control of the rig first."
+                     .format(", ".join(found)))
+    return ""
+'''
+
+_GET_ALL_CTLS = _NAMESPACE_FUNC + '''
+
+def _ns(namespace, name):
+    return "{}:{}".format(namespace, name) if namespace else name
 
 
 def _flatten_set(node, seen):
@@ -185,26 +209,28 @@ def _flatten_set(node, seen):
 
 def _all_controls():
     # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)
-    sets = cmds.ls(_ns("*_controllers_grp"), type="objectSet") or []
+    namespace = _namespace()
+    sets = cmds.ls(_ns(namespace, "*_controllers_grp"), type="objectSet") or []
     ctls = []
     seen = set(sets)
     for s in sets:
         ctls += _flatten_set(s, seen)
     # 2) fallback: mGear controls carry an "isCtl" attribute
     if not ctls:
-        ctls = cmds.ls(_ns("*.isCtl"), objectsOnly=True) or []
+        ctls = cmds.ls(_ns(namespace, "*.isCtl"), objectsOnly=True) or []
     # 3) fallback: transforms named *_ctl
     if not ctls:
-        ctls = cmds.ls(_ns("*_ctl"), type="transform") or []
+        ctls = cmds.ls(_ns(namespace, "*_ctl"), type="transform") or []
     if not ctls:
         cmds.warning("Anim Picker: no controls found in namespace '{}'"
-                     .format(__NAMESPACE__ or ""))
+                     .format(namespace))
     return list(dict.fromkeys(ctls))
 '''
 
 _RESET_FUNC = '''
 
 def _reset(nodes):
+    failed = []
     for node in nodes:
         for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:
             plug = "{}.{}".format(node, attr)
@@ -213,7 +239,10 @@ def _reset(nodes):
                 if default:
                     cmds.setAttr(plug, default[0])
             except Exception:
-                pass
+                failed.append(plug)
+    if failed:
+        cmds.warning("Anim Picker: could not reset {} attributes "
+                     "(connected?): {}".format(len(failed), ", ".join(failed[:10])))
 '''
 
 SCRIPT_SELECT_ALL = _GET_ALL_CTLS + '''
@@ -268,15 +297,88 @@ if not __INIT__:
 '''
 
 
+_MIRROR_FUNC = '''
+import re
+from mgear.core import anim_utils
+
+_SIDE = re.compile(r"_([LR])(\\d+)_")
+
+
+def _other(node):
+    swap = {"L": "R", "R": "L"}
+    return _SIDE.sub(lambda m: "_{}{}_".format(swap[m.group(1)], m.group(2)),
+                     node, count=1)
+
+
+def _mirror(nodes, flip=False):
+    # mGear mirrorPose 후, 값이 바뀐 컨트롤에 키를 찍는다(Auto Key 켜져 있을 때).
+    # 키가 있는 컨트롤은 키를 찍지 않으면 프레임 이동 시 값이 되돌아간다.
+    if not nodes:
+        cmds.warning("Anim Picker: nothing to mirror")
+        return
+    targets = set(_other(n) for n in nodes)
+    if flip:
+        targets.update(nodes)
+    cmds.undoInfo(openChunk=True)
+    try:
+        anim_utils.mirrorPose(flip=flip, nodes=nodes)
+        if cmds.autoKeyframe(q=True, state=True):
+            keyed = [n for n in targets if cmds.objExists(n)]
+            if keyed:
+                cmds.setKeyframe(keyed)
+    finally:
+        cmds.undoInfo(closeChunk=True)
+
+
+def _copy_side(side, parts):
+    # side 쪽 컨트롤(parts 컴포넌트)의 포즈를 반대쪽에 복사한다.
+    namespace = _namespace()
+    pattern = "*_{}*_ctl".format(side)
+    if namespace:
+        pattern = "{}:{}".format(namespace, pattern)
+    nodes = []
+    for node in cmds.ls(pattern, type="transform") or []:
+        short = node.split("|")[-1].split(":")[-1]
+        match = _SIDE.search(short)
+        if match and match.group(1) == side and short.split("_")[0] in parts:
+            nodes.append(node)
+    _mirror(nodes)
+'''
+
+LIMB_PARTS = ("arm", "armUI", "shoulder", "finger", "thumb", "thumbRoll",
+              "meta", "leg", "legUI", "foot")
+HAND_PARTS = ("finger", "thumb", "thumbRoll", "meta")
+
+
+def script_copy_side(side, parts):
+    """side(L/R) 의 팔·다리(또는 손) 포즈를 반대쪽에 복사."""
+    return _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _copy_side({!r}, {!r})
+'''.format(side, parts)
+
+
+SCRIPT_MIRROR_SEL = _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _mirror(cmds.ls(sl=True) or [])
+'''
+
+SCRIPT_FLIP_SEL = _NAMESPACE_FUNC + _MIRROR_FUNC + '''
+if not __INIT__:
+    _mirror(cmds.ls(sl=True) or [], flip=True)
+'''
+
+
 def script_ikfk(limb, side):
     """mGear anim_utils 의 IK/FK 매칭 (클릭 시 현재 상태의 반대로 전환+매칭)."""
     ik_rot = (',\n        ik_rot="arm_{}_ikRot_ctl"'.format(side)
               if limb == "arm" else "")
-    return '''from mgear.core import anim_utils
+    return _NAMESPACE_FUNC + '''
+from mgear.core import anim_utils
 
 if not __INIT__:
     anim_utils.ikFkMatch_with_namespace(
-        __NAMESPACE__,
+        _namespace(),
         "{limb}_blend",
         "{limb}UI_{s}_ctl",
         ["{limb}_{s}_fk0_ctl", "{limb}_{s}_fk1_ctl", "{limb}_{s}_fk2_ctl"],
@@ -287,8 +389,9 @@ if not __INIT__:
 
 def script_space_switch(ui_host, attr, ctl_name):
     """mGear 스페이스 스위치 (클릭하면 스페이스 목록 팝업)."""
-    return '''from mgear.anim_picker.handlers import action_handlers
-action_handlers.show_space_chage_list(__NAMESPACE__,
+    return _NAMESPACE_FUNC + '''
+from mgear.anim_picker.handlers import action_handlers
+action_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),
                                       "{ui}",
                                       "{attr}",
                                       "{ctl}",
@@ -421,7 +524,7 @@ def build_body_tab():
     # ---- 패널 (가장 먼저 = 가장 뒤에 그려짐)
     items += [
         panel("BODY", (0, -6), 400, 624, COLOR["panel"]),
-        panel("TOOLS", (0, -360), 628, 66, COLOR["panel"]),
+        panel("TOOLS", (0, -377), 628, 100, COLOR["panel"]),
     ]
     items += build_side_panel("R0", -1) + build_side_panel("L0", 1)
 
@@ -500,6 +603,15 @@ def build_body_tab():
     for i, (text, script, color, tcolor) in enumerate(tools):
         items.append(button(text, (-240 + i * 120, -368), script, w=108,
                             h=26, color=color, text_color=tcolor, size=8))
+    mirror_tools = [
+        ("Copy L \u2192 R", script_copy_side("L", LIMB_PARTS)),
+        ("Copy R \u2192 L", script_copy_side("R", LIMB_PARTS)),
+        ("Mirror Selected", SCRIPT_MIRROR_SEL),
+        ("Flip Selected", SCRIPT_FLIP_SEL),
+    ]
+    for i, (text, script) in enumerate(mirror_tools):
+        items.append(button(text, (-180 + i * 120, -402), script, w=108,
+                            h=26, size=8))
     return items
 
 
@@ -566,8 +678,12 @@ def build_hands_tab():
     items += build_hand("L0", 1, 150)
     items += [
         panel("TOOLS", (0, -206), 580, 50, COLOR["panel"]),
-        button("Key Selected", (-60, -214), SCRIPT_KEY_SEL, w=108, h=24),
-        button("Reset Selected", (60, -214), SCRIPT_RESET_SEL, w=108, h=24),
+        button("Hand L \u2192 R", (-180, -214),
+               script_copy_side("L", HAND_PARTS), w=108, h=24),
+        button("Hand R \u2192 L", (-60, -214),
+               script_copy_side("R", HAND_PARTS), w=108, h=24),
+        button("Key Selected", (60, -214), SCRIPT_KEY_SEL, w=108, h=24),
+        button("Reset Selected", (180, -214), SCRIPT_RESET_SEL, w=108, h=24),
     ]
     return items
 

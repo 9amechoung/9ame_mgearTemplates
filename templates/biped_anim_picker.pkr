@@ -46,24 +46,24 @@
                         ],
                         "position": [
                             0,
-                            -360
+                            -377
                         ],
                         "handles": [
                             [
                                 314.0,
-                                33.0
+                                50.0
                             ],
                             [
                                 314.0,
-                                -33.0
+                                -50.0
                             ],
                             [
                                 -314.0,
-                                -33.0
+                                -50.0
                             ],
                             [
                                 -314.0,
-                                33.0
+                                50.0
                             ]
                         ],
                         "backdrop": true,
@@ -401,7 +401,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        __NAMESPACE__,\n        \"arm_blend\",\n        \"armUI_R0_ctl\",\n        [\"arm_R0_fk0_ctl\", \"arm_R0_fk1_ctl\", \"arm_R0_fk2_ctl\"],\n        \"arm_R0_ik_ctl\",\n        \"arm_R0_upv_ctl\",\n        ik_rot=\"arm_R0_ikRot_ctl\")\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        _namespace(),\n        \"arm_blend\",\n        \"armUI_R0_ctl\",\n        [\"arm_R0_fk0_ctl\", \"arm_R0_fk1_ctl\", \"arm_R0_fk2_ctl\"],\n        \"arm_R0_ik_ctl\",\n        \"arm_R0_upv_ctl\",\n        ik_rot=\"arm_R0_ikRot_ctl\")\n"
                     },
                     {
                         "color": [
@@ -519,7 +519,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_R0_ctl\",\n                                      \"arm_ikref\",\n                                      \"arm_R0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_R0_ctl\",\n                                      \"arm_ikref\",\n                                      \"arm_R0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -607,7 +607,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_R0_ctl\",\n                                      \"arm_ikRotRef\",\n                                      \"arm_R0_ikRot_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_R0_ctl\",\n                                      \"arm_ikRotRef\",\n                                      \"arm_R0_ikRot_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -695,7 +695,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_R0_ctl\",\n                                      \"arm_upvref\",\n                                      \"arm_R0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_R0_ctl\",\n                                      \"arm_upvref\",\n                                      \"arm_R0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -783,7 +783,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_R0_ctl\",\n                                      \"shoulder_rotRef\",\n                                      \"shoulder_R0_orbit_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_R0_ctl\",\n                                      \"shoulder_rotRef\",\n                                      \"shoulder_R0_orbit_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -1083,7 +1083,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        __NAMESPACE__,\n        \"leg_blend\",\n        \"legUI_R0_ctl\",\n        [\"leg_R0_fk0_ctl\", \"leg_R0_fk1_ctl\", \"leg_R0_fk2_ctl\"],\n        \"leg_R0_ik_ctl\",\n        \"leg_R0_upv_ctl\")\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        _namespace(),\n        \"leg_blend\",\n        \"legUI_R0_ctl\",\n        [\"leg_R0_fk0_ctl\", \"leg_R0_fk1_ctl\", \"leg_R0_fk2_ctl\"],\n        \"leg_R0_ik_ctl\",\n        \"leg_R0_upv_ctl\")\n"
                     },
                     {
                         "color": [
@@ -1201,7 +1201,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"legUI_R0_ctl\",\n                                      \"leg_ikref\",\n                                      \"leg_R0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"legUI_R0_ctl\",\n                                      \"leg_ikref\",\n                                      \"leg_R0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -1289,7 +1289,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"legUI_R0_ctl\",\n                                      \"leg_upvref\",\n                                      \"leg_R0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"legUI_R0_ctl\",\n                                      \"leg_upvref\",\n                                      \"leg_R0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -1755,7 +1755,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        __NAMESPACE__,\n        \"arm_blend\",\n        \"armUI_L0_ctl\",\n        [\"arm_L0_fk0_ctl\", \"arm_L0_fk1_ctl\", \"arm_L0_fk2_ctl\"],\n        \"arm_L0_ik_ctl\",\n        \"arm_L0_upv_ctl\",\n        ik_rot=\"arm_L0_ikRot_ctl\")\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        _namespace(),\n        \"arm_blend\",\n        \"armUI_L0_ctl\",\n        [\"arm_L0_fk0_ctl\", \"arm_L0_fk1_ctl\", \"arm_L0_fk2_ctl\"],\n        \"arm_L0_ik_ctl\",\n        \"arm_L0_upv_ctl\",\n        ik_rot=\"arm_L0_ikRot_ctl\")\n"
                     },
                     {
                         "color": [
@@ -1873,7 +1873,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_L0_ctl\",\n                                      \"arm_ikref\",\n                                      \"arm_L0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_L0_ctl\",\n                                      \"arm_ikref\",\n                                      \"arm_L0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -1961,7 +1961,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_L0_ctl\",\n                                      \"arm_ikRotRef\",\n                                      \"arm_L0_ikRot_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_L0_ctl\",\n                                      \"arm_ikRotRef\",\n                                      \"arm_L0_ikRot_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -2049,7 +2049,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_L0_ctl\",\n                                      \"arm_upvref\",\n                                      \"arm_L0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_L0_ctl\",\n                                      \"arm_upvref\",\n                                      \"arm_L0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -2137,7 +2137,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"armUI_L0_ctl\",\n                                      \"shoulder_rotRef\",\n                                      \"shoulder_L0_orbit_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"armUI_L0_ctl\",\n                                      \"shoulder_rotRef\",\n                                      \"shoulder_L0_orbit_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -2437,7 +2437,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        __NAMESPACE__,\n        \"leg_blend\",\n        \"legUI_L0_ctl\",\n        [\"leg_L0_fk0_ctl\", \"leg_L0_fk1_ctl\", \"leg_L0_fk2_ctl\"],\n        \"leg_L0_ik_ctl\",\n        \"leg_L0_upv_ctl\")\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.core import anim_utils\n\nif not __INIT__:\n    anim_utils.ikFkMatch_with_namespace(\n        _namespace(),\n        \"leg_blend\",\n        \"legUI_L0_ctl\",\n        [\"leg_L0_fk0_ctl\", \"leg_L0_fk1_ctl\", \"leg_L0_fk2_ctl\"],\n        \"leg_L0_ik_ctl\",\n        \"leg_L0_upv_ctl\")\n"
                     },
                     {
                         "color": [
@@ -2555,7 +2555,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"legUI_L0_ctl\",\n                                      \"leg_ikref\",\n                                      \"leg_L0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"legUI_L0_ctl\",\n                                      \"leg_ikref\",\n                                      \"leg_L0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -2643,7 +2643,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"legUI_L0_ctl\",\n                                      \"leg_upvref\",\n                                      \"leg_L0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"legUI_L0_ctl\",\n                                      \"leg_upvref\",\n                                      \"leg_L0_upv_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -8388,7 +8388,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "from mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__,\n                                      \"spineUI_C0_ctl\",\n                                      \"neck_ikref\",\n                                      \"neck_C0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nfrom mgear.anim_picker.handlers import action_handlers\naction_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),\n                                      \"spineUI_C0_ctl\",\n                                      \"neck_ikref\",\n                                      \"neck_C0_ik_ctl\",\n                                      __SELF__,\n                                      __INIT__)\n"
                     },
                     {
                         "color": [
@@ -8908,7 +8908,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "import maya.cmds as cmds\n\n\ndef _ns(name):\n    return \"{}:{}\".format(__NAMESPACE__, name) if __NAMESPACE__ else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    sets = cmds.ls(_ns(\"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(__NAMESPACE__ or \"\"))\n    return list(dict.fromkeys(ctls))\n\n\nif not __INIT__:\n    cmds.select(_all_controls(), r=True)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\n\ndef _ns(namespace, name):\n    return \"{}:{}\".format(namespace, name) if namespace else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    namespace = _namespace()\n    sets = cmds.ls(_ns(namespace, \"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(namespace))\n    return list(dict.fromkeys(ctls))\n\n\nif not __INIT__:\n    cmds.select(_all_controls(), r=True)\n"
                     },
                     {
                         "color": [
@@ -8996,7 +8996,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "import maya.cmds as cmds\n\n\ndef _ns(name):\n    return \"{}:{}\".format(__NAMESPACE__, name) if __NAMESPACE__ else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    sets = cmds.ls(_ns(\"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(__NAMESPACE__ or \"\"))\n    return list(dict.fromkeys(ctls))\n\n\nif not __INIT__:\n    ctls = _all_controls()\n    if ctls:\n        cmds.setKeyframe(ctls)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\n\ndef _ns(namespace, name):\n    return \"{}:{}\".format(namespace, name) if namespace else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    namespace = _namespace()\n    sets = cmds.ls(_ns(namespace, \"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(namespace))\n    return list(dict.fromkeys(ctls))\n\n\nif not __INIT__:\n    ctls = _all_controls()\n    if ctls:\n        cmds.setKeyframe(ctls)\n"
                     },
                     {
                         "color": [
@@ -9172,7 +9172,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "import maya.cmds as cmds\n\n\ndef _reset(nodes):\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                pass\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(cmds.ls(sl=True) or [])\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _reset(nodes):\n    failed = []\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                failed.append(plug)\n    if failed:\n        cmds.warning(\"Anim Picker: could not reset {} attributes \"\n                     \"(connected?): {}\".format(len(failed), \", \".join(failed[:10])))\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(cmds.ls(sl=True) or [])\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
                     },
                     {
                         "color": [
@@ -9260,7 +9260,359 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "import maya.cmds as cmds\n\n\ndef _ns(name):\n    return \"{}:{}\".format(__NAMESPACE__, name) if __NAMESPACE__ else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    sets = cmds.ls(_ns(\"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(\"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(__NAMESPACE__ or \"\"))\n    return list(dict.fromkeys(ctls))\n\n\ndef _reset(nodes):\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                pass\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(_all_controls())\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\n\ndef _ns(namespace, name):\n    return \"{}:{}\".format(namespace, name) if namespace else name\n\n\ndef _flatten_set(node, seen):\n    result = []\n    for member in cmds.sets(node, q=True) or []:\n        if cmds.nodeType(member) == \"objectSet\":\n            if member not in seen:\n                seen.add(member)\n                result += _flatten_set(member, seen)\n        else:\n            result.append(member)\n    return result\n\n\ndef _all_controls():\n    # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)\n    namespace = _namespace()\n    sets = cmds.ls(_ns(namespace, \"*_controllers_grp\"), type=\"objectSet\") or []\n    ctls = []\n    seen = set(sets)\n    for s in sets:\n        ctls += _flatten_set(s, seen)\n    # 2) fallback: mGear controls carry an \"isCtl\" attribute\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*.isCtl\"), objectsOnly=True) or []\n    # 3) fallback: transforms named *_ctl\n    if not ctls:\n        ctls = cmds.ls(_ns(namespace, \"*_ctl\"), type=\"transform\") or []\n    if not ctls:\n        cmds.warning(\"Anim Picker: no controls found in namespace '{}'\"\n                     .format(namespace))\n    return list(dict.fromkeys(ctls))\n\n\ndef _reset(nodes):\n    failed = []\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                failed.append(plug)\n    if failed:\n        cmds.warning(\"Anim Picker: could not reset {} attributes \"\n                     \"(connected?): {}\".format(len(failed), \", \".join(failed[:10])))\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(_all_controls())\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
+                            -180,
+                            -402
+                        ],
+                        "handles": [
+                            [
+                                41.0,
+                                13.0
+                            ],
+                            [
+                                47.5,
+                                11.258
+                            ],
+                            [
+                                52.258,
+                                6.5
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.258,
+                                -6.5
+                            ],
+                            [
+                                47.5,
+                                -11.258
+                            ],
+                            [
+                                41.0,
+                                -13.0
+                            ],
+                            [
+                                -41.0,
+                                -13.0
+                            ],
+                            [
+                                -47.5,
+                                -11.258
+                            ],
+                            [
+                                -52.258,
+                                -6.5
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.258,
+                                6.5
+                            ],
+                            [
+                                -47.5,
+                                11.258
+                            ],
+                            [
+                                -41.0,
+                                13.0
+                            ]
+                        ],
+                        "text": "Copy L \u2192 R",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _copy_side('L', ('arm', 'armUI', 'shoulder', 'finger', 'thumb', 'thumbRoll', 'meta', 'leg', 'legUI', 'foot'))\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
+                            -60,
+                            -402
+                        ],
+                        "handles": [
+                            [
+                                41.0,
+                                13.0
+                            ],
+                            [
+                                47.5,
+                                11.258
+                            ],
+                            [
+                                52.258,
+                                6.5
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.258,
+                                -6.5
+                            ],
+                            [
+                                47.5,
+                                -11.258
+                            ],
+                            [
+                                41.0,
+                                -13.0
+                            ],
+                            [
+                                -41.0,
+                                -13.0
+                            ],
+                            [
+                                -47.5,
+                                -11.258
+                            ],
+                            [
+                                -52.258,
+                                -6.5
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.258,
+                                6.5
+                            ],
+                            [
+                                -47.5,
+                                11.258
+                            ],
+                            [
+                                -41.0,
+                                13.0
+                            ]
+                        ],
+                        "text": "Copy R \u2192 L",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _copy_side('R', ('arm', 'armUI', 'shoulder', 'finger', 'thumb', 'thumbRoll', 'meta', 'leg', 'legUI', 'foot'))\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
+                            60,
+                            -402
+                        ],
+                        "handles": [
+                            [
+                                41.0,
+                                13.0
+                            ],
+                            [
+                                47.5,
+                                11.258
+                            ],
+                            [
+                                52.258,
+                                6.5
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.258,
+                                -6.5
+                            ],
+                            [
+                                47.5,
+                                -11.258
+                            ],
+                            [
+                                41.0,
+                                -13.0
+                            ],
+                            [
+                                -41.0,
+                                -13.0
+                            ],
+                            [
+                                -47.5,
+                                -11.258
+                            ],
+                            [
+                                -52.258,
+                                -6.5
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.258,
+                                6.5
+                            ],
+                            [
+                                -47.5,
+                                11.258
+                            ],
+                            [
+                                -41.0,
+                                13.0
+                            ]
+                        ],
+                        "text": "Mirror Selected",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _mirror(cmds.ls(sl=True) or [])\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
+                            180,
+                            -402
+                        ],
+                        "handles": [
+                            [
+                                41.0,
+                                13.0
+                            ],
+                            [
+                                47.5,
+                                11.258
+                            ],
+                            [
+                                52.258,
+                                6.5
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.258,
+                                -6.5
+                            ],
+                            [
+                                47.5,
+                                -11.258
+                            ],
+                            [
+                                41.0,
+                                -13.0
+                            ],
+                            [
+                                -41.0,
+                                -13.0
+                            ],
+                            [
+                                -47.5,
+                                -11.258
+                            ],
+                            [
+                                -52.258,
+                                -6.5
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.258,
+                                6.5
+                            ],
+                            [
+                                -47.5,
+                                11.258
+                            ],
+                            [
+                                -41.0,
+                                13.0
+                            ]
+                        ],
+                        "text": "Flip Selected",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _mirror(cmds.ls(sl=True) or [], flip=True)\n"
                     }
                 ]
             }
@@ -13476,7 +13828,183 @@
                             255
                         ],
                         "position": [
+                            -180,
+                            -214
+                        ],
+                        "handles": [
+                            [
+                                42.0,
+                                12.0
+                            ],
+                            [
+                                48.0,
+                                10.392
+                            ],
+                            [
+                                52.392,
+                                6.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.392,
+                                -6.0
+                            ],
+                            [
+                                48.0,
+                                -10.392
+                            ],
+                            [
+                                42.0,
+                                -12.0
+                            ],
+                            [
+                                -42.0,
+                                -12.0
+                            ],
+                            [
+                                -48.0,
+                                -10.392
+                            ],
+                            [
+                                -52.392,
+                                -6.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.392,
+                                6.0
+                            ],
+                            [
+                                -48.0,
+                                10.392
+                            ],
+                            [
+                                -42.0,
+                                12.0
+                            ]
+                        ],
+                        "text": "Hand L \u2192 R",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _copy_side('L', ('finger', 'thumb', 'thumbRoll', 'meta'))\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
                             -60,
+                            -214
+                        ],
+                        "handles": [
+                            [
+                                42.0,
+                                12.0
+                            ],
+                            [
+                                48.0,
+                                10.392
+                            ],
+                            [
+                                52.392,
+                                6.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                54.0,
+                                0.0
+                            ],
+                            [
+                                52.392,
+                                -6.0
+                            ],
+                            [
+                                48.0,
+                                -10.392
+                            ],
+                            [
+                                42.0,
+                                -12.0
+                            ],
+                            [
+                                -42.0,
+                                -12.0
+                            ],
+                            [
+                                -48.0,
+                                -10.392
+                            ],
+                            [
+                                -52.392,
+                                -6.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -54.0,
+                                -0.0
+                            ],
+                            [
+                                -52.392,
+                                6.0
+                            ],
+                            [
+                                -48.0,
+                                10.392
+                            ],
+                            [
+                                -42.0,
+                                12.0
+                            ]
+                        ],
+                        "text": "Hand R \u2192 L",
+                        "text_size": 8.0,
+                        "text_color": [
+                            240,
+                            242,
+                            245,
+                            255
+                        ],
+                        "action_mode": true,
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _namespace():\n    # \ud53c\ucee4\uc5d0 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \uc9c0\uc815\ub418\uc9c0 \uc54a\uc558\uc73c\uba74 \uc120\ud0dd\ud55c \ub178\ub4dc\uc5d0\uc11c,\n    # \uadf8\ub798\ub3c4 \uc5c6\uc73c\uba74 \uc52c\uc5d0 \ucee8\ud2b8\ub864\ub7ec \uc14b\uc774 \uc788\ub294 \ub124\uc784\uc2a4\ud398\uc774\uc2a4\uac00 \ud558\ub098\ubfd0\uc77c \ub54c \uadf8\uac83\uc744 \uc4f4\ub2e4.\n    if __NAMESPACE__:\n        return __NAMESPACE__\n    sel = cmds.ls(sl=True) or []\n    if sel:\n        return sel[0].split(\"|\")[-1].rpartition(\":\")[0]\n    if cmds.ls(\"*_controllers_grp\", type=\"objectSet\"):\n        return \"\"\n    found = sorted(set(\n        s.rpartition(\":\")[0] for s in\n        cmds.ls(\"*:*_controllers_grp\", type=\"objectSet\", recursive=True) or []))\n    if len(found) == 1:\n        return found[0]\n    if len(found) > 1:\n        cmds.warning(\"Anim Picker: several rigs found ({}). Pick the namespace \"\n                     \"in the picker or select a control of the rig first.\"\n                     .format(\", \".join(found)))\n    return \"\"\n\nimport re\nfrom mgear.core import anim_utils\n\n_SIDE = re.compile(r\"_([LR])(\\d+)_\")\n\n\ndef _other(node):\n    swap = {\"L\": \"R\", \"R\": \"L\"}\n    return _SIDE.sub(lambda m: \"_{}{}_\".format(swap[m.group(1)], m.group(2)),\n                     node, count=1)\n\n\ndef _mirror(nodes, flip=False):\n    # mGear mirrorPose \ud6c4, \uac12\uc774 \ubc14\ub010 \ucee8\ud2b8\ub864\uc5d0 \ud0a4\ub97c \ucc0d\ub294\ub2e4(Auto Key \ucf1c\uc838 \uc788\uc744 \ub54c).\n    # \ud0a4\uac00 \uc788\ub294 \ucee8\ud2b8\ub864\uc740 \ud0a4\ub97c \ucc0d\uc9c0 \uc54a\uc73c\uba74 \ud504\ub808\uc784 \uc774\ub3d9 \uc2dc \uac12\uc774 \ub418\ub3cc\uc544\uac04\ub2e4.\n    if not nodes:\n        cmds.warning(\"Anim Picker: nothing to mirror\")\n        return\n    targets = set(_other(n) for n in nodes)\n    if flip:\n        targets.update(nodes)\n    cmds.undoInfo(openChunk=True)\n    try:\n        anim_utils.mirrorPose(flip=flip, nodes=nodes)\n        if cmds.autoKeyframe(q=True, state=True):\n            keyed = [n for n in targets if cmds.objExists(n)]\n            if keyed:\n                cmds.setKeyframe(keyed)\n    finally:\n        cmds.undoInfo(closeChunk=True)\n\n\ndef _copy_side(side, parts):\n    # side \ucabd \ucee8\ud2b8\ub864(parts \ucef4\ud3ec\ub10c\ud2b8)\uc758 \ud3ec\uc988\ub97c \ubc18\ub300\ucabd\uc5d0 \ubcf5\uc0ac\ud55c\ub2e4.\n    namespace = _namespace()\n    pattern = \"*_{}*_ctl\".format(side)\n    if namespace:\n        pattern = \"{}:{}\".format(namespace, pattern)\n    nodes = []\n    for node in cmds.ls(pattern, type=\"transform\") or []:\n        short = node.split(\"|\")[-1].split(\":\")[-1]\n        match = _SIDE.search(short)\n        if match and match.group(1) == side and short.split(\"_\")[0] in parts:\n            nodes.append(node)\n    _mirror(nodes)\n\nif not __INIT__:\n    _copy_side('R', ('finger', 'thumb', 'thumbRoll', 'meta'))\n"
+                    },
+                    {
+                        "color": [
+                            59,
+                            66,
+                            82,
+                            255
+                        ],
+                        "position": [
+                            60,
                             -214
                         ],
                         "handles": [
@@ -13564,7 +14092,7 @@
                             255
                         ],
                         "position": [
-                            60,
+                            180,
                             -214
                         ],
                         "handles": [
@@ -13642,7 +14170,7 @@
                             255
                         ],
                         "action_mode": true,
-                        "action_script": "import maya.cmds as cmds\n\n\ndef _reset(nodes):\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                pass\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(cmds.ls(sl=True) or [])\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
+                        "action_script": "import maya.cmds as cmds\n\n\ndef _reset(nodes):\n    failed = []\n    for node in nodes:\n        for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:\n            plug = \"{}.{}\".format(node, attr)\n            try:\n                default = cmds.attributeQuery(attr, node=node, listDefault=True)\n                if default:\n                    cmds.setAttr(plug, default[0])\n            except Exception:\n                failed.append(plug)\n    if failed:\n        cmds.warning(\"Anim Picker: could not reset {} attributes \"\n                     \"(connected?): {}\".format(len(failed), \", \".join(failed[:10])))\n\n\nif not __INIT__:\n    cmds.undoInfo(openChunk=True)\n    try:\n        _reset(cmds.ls(sl=True) or [])\n    finally:\n        cmds.undoInfo(closeChunk=True)\n"
                     }
                 ]
             }

@@ -17,6 +17,7 @@ mGear 공식 `biped.pkr`과 같은 컨트롤 104개를 다루고, 섹션별 패�
 2. 피커 창 상단의 `Load` 버튼 → `templates/biped_anim_picker.pkr` 선택
 3. 씬에 저장해 두려면 `New`로 피커 노드를 만든 뒤 불러오고 `Save` 합니다.
 4. 리그가 레퍼런스(네임스페이스 사용)라면 피커 상단에서 네임스페이스를 선택합니다.
+   선택하지 않아도 버튼이 선택한 컨트롤의 네임스페이스를 쓰고, 선택이 없으면 씬에 리그가 하나뿐일 때 그 리그를 자동으로 찾습니다.
 
 ### 구성
 
@@ -31,11 +32,17 @@ mGear 공식 `biped.pkr`과 같은 컨트롤 104개를 다루고, 섹션별 패�
   - `All Fingers`: 그 손의 손가락 전체 선택
 - 하단 **TOOLS**: `Select All`, `Key All`, `Key Selected`, `Reset Selected`, `Reset All`
   - All 계열 버튼은 리그의 `rig_controllers_grp` 셋 기준이고, Reset은 키 가능한 속성을 기본값으로 되돌립니다(Undo 한 번으로 취소 가능).
+- 하단 **TOOLS 둘째 줄 (미러)**
+  - `Copy L → R` / `Copy R → L`: 한쪽 팔·어깨·손가락·다리·발 포즈를 반대쪽에 복사 (IK/FK 상태 포함, 몸통·눈은 그대로)
+  - `Mirror Selected`: 선택한 컨트롤을 반대쪽에 복사 (가운데 컨트롤은 반전)
+  - `Flip Selected`: 선택한 컨트롤의 좌우 포즈를 맞바꿈
+  - Auto Key가 켜져 있으면 값이 바뀐 컨트롤에 바로 키를 찍습니다. 키가 있는 컨트롤은 키를 찍지 않으면 프레임을 옮길 때 값이 되돌아갑니다. Undo 한 번으로 키까지 취소됩니다.
 
 **Hands 탭**
 - 손가락 마디별 컨트롤 (`finger_X0~3` = 검지~새끼, `thumb`, `thumbRoll`, `meta`)
 - 손가락 위의 `I M R P T` 칩: 해당 손가락 체인 전체 선택
 - `All Fingers`, `Key Fingers`: 손가락 전체 선택/키
+- `Hand L → R` / `Hand R → L`: 한쪽 손가락 포즈를 반대쪽 손에 복사
 
 화면 기준으로 캐릭터의 **L(왼쪽)은 오른쪽**, **R(오른쪽)은 왼쪽**에 있습니다(캐릭터를 뒤에서 보는 방향, mGear 기본 템플릿과 동일).
 
