@@ -174,7 +174,10 @@ def _namespace():
         return __NAMESPACE__
     sel = cmds.ls(sl=True) or []
     if sel:
-        return sel[0].split("|")[-1].rpartition(":")[0]
+        ns = sel[0].split("|")[-1].rpartition(":")[0]
+        pattern = "{}:*_controllers_grp".format(ns) if ns else "*_controllers_grp"
+        if cmds.ls(pattern, type="objectSet"):
+            return ns
     if cmds.ls("*_controllers_grp", type="objectSet"):
         return ""
     found = sorted(set(
@@ -461,12 +464,18 @@ def script_space_switch(ui_host, attr, ctl_name):
     """mGear 스페이스 스위치 (클릭하면 스페이스 목록 팝업)."""
     return _NAMESPACE_FUNC + '''
 from mgear.anim_picker.handlers import action_handlers
-action_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),
-                                      "{ui}",
-                                      "{attr}",
-                                      "{ctl}",
-                                      __SELF__,
-                                      __INIT__)
+
+_space_ns = _namespace()
+_space_host = "{{}}:{ui}".format(_space_ns) if _space_ns else "{ui}"
+# 로드 시(__INIT__)에는 버튼 글자만 현재 스페이스로 바꾼다. 리그에 해당
+# UI 노드/속성이 없으면 에러 로그 없이 건너뛴다.
+if not __INIT__ or cmds.objExists(_space_host + ".{attr}"):
+    action_handlers.show_space_chage_list(_space_ns,
+                                          "{ui}",
+                                          "{attr}",
+                                          "{ctl}",
+                                          __SELF__,
+                                          __INIT__)
 '''.format(ui=ui_host, attr=attr, ctl=ctl_name)
 
 
