@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1082" height="1250" viewBox="0 0 676 781" font-family="Segoe UI, Helvetica, Arial, sans-serif">
 <rect width="100%" height="100%" fill="#444444"/>
-<clipPath id="clip140602395041152"><rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip140625951628672"><rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="138.0" y="24.0" width="400.0" height="624.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
-<rect x="138.0" y="24.0" width="400.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140602395041152)"/>
+<rect x="138.0" y="24.0" width="400.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140625951628672)"/>
 <text x="144.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">BODY</text>
-<clipPath id="clip140602393262336"><rect x="24.0" y="657.0" width="628.0" height="100.0" rx="10.0"/></clipPath>
+<clipPath id="clip140625951946880"><rect x="24.0" y="657.0" width="628.0" height="100.0" rx="10.0"/></clipPath>
 <rect x="24.0" y="657.0" width="628.0" height="100.0" rx="10.0" fill="rgb(120,135,160)" fill-opacity="0.15" stroke="rgb(120,135,160)" stroke-opacity="0.50" stroke-width="1"/>
-<rect x="24.0" y="657.0" width="628.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140602393262336)"/>
+<rect x="24.0" y="657.0" width="628.0" height="18" fill="rgb(120,135,160)" fill-opacity="0.38" clip-path="url(#clip140625951946880)"/>
 <text x="30.0" y="666.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">TOOLS</text>
-<clipPath id="clip140602393255616"><rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip140625951940160"><rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="24.0" y="24.0" width="104.0" height="624.0" rx="10.0" fill="rgb(255,84,96)" fill-opacity="0.11" stroke="rgb(255,84,96)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="24.0" y="24.0" width="104.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip140602393255616)"/>
+<rect x="24.0" y="24.0" width="104.0" height="18" fill="rgb(255,84,96)" fill-opacity="0.35" clip-path="url(#clip140625951940160)"/>
 <text x="30.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">RIGHT  (R)</text>
 <text x="34.00" y="64.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">ARM</text>
 <polygon points="109.00,73.00 113.50,74.21 116.79,77.50 118.00,82.00 118.00,82.00 116.79,86.50 113.50,89.79 109.00,91.00 43.00,91.00 38.50,89.79 35.21,86.50 34.00,82.00 34.00,82.00 35.21,77.50 38.50,74.21 43.00,73.00" fill="rgb(255,84,96)" fill-opacity="0.92"/>
@@ -43,9 +43,9 @@
 <text x="34.00" y="562.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">HAND</text>
 <polygon points="109.00,571.00 113.50,572.21 116.79,575.50 118.00,580.00 118.00,580.00 116.79,584.50 113.50,587.79 109.00,589.00 43.00,589.00 38.50,587.79 35.21,584.50 34.00,580.00 34.00,580.00 35.21,575.50 38.50,572.21 43.00,571.00" fill="rgb(255,84,96)" fill-opacity="0.92"/>
 <text x="76.00" y="580.00" font-size="8.0" text-anchor="middle" dominant-baseline="middle" font-weight="600" fill="rgb(25,28,34)">All Fingers</text>
-<clipPath id="clip140602393471872"><rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
+<clipPath id="clip140625952156352"><rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0"/></clipPath>
 <rect x="548.0" y="24.0" width="104.0" height="624.0" rx="10.0" fill="rgb(61,139,255)" fill-opacity="0.11" stroke="rgb(61,139,255)" stroke-opacity="0.46" stroke-width="1"/>
-<rect x="548.0" y="24.0" width="104.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip140602393471872)"/>
+<rect x="548.0" y="24.0" width="104.0" height="18" fill="rgb(61,139,255)" fill-opacity="0.35" clip-path="url(#clip140625952156352)"/>
 <text x="554.0" y="33.0" font-size="10.8" dominant-baseline="middle" fill="#ebebeb">LEFT  (L)</text>
 <text x="558.00" y="64.00" font-size="7.0" text-anchor="start" dominant-baseline="middle" font-weight="600" fill="rgb(160,168,180)">ARM</text>
 <polygon points="633.00,73.00 637.50,74.21 640.79,77.50 642.00,82.00 642.00,82.00 640.79,86.50 637.50,89.79 633.00,91.00 567.00,91.00 562.50,89.79 559.21,86.50 558.00,82.00 558.00,82.00 559.21,77.50 562.50,74.21 567.00,73.00" fill="rgb(61,139,255)" fill-opacity="0.92"/>
