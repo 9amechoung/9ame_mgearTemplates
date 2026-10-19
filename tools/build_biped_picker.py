@@ -164,11 +164,35 @@ def panel(title, center, w, h, color=COLOR["panel"]):
 #   __CONTROLS__, __FLATCONTROLS__
 #   __INIT__ 이 True 일 때(피커 로드 시)는 실행하지 않도록 가드한다.
 # --------------------------------------------------------------------------
-_GET_ALL_CTLS = '''import maya.cmds as cmds
+_NAMESPACE_FUNC = '''import maya.cmds as cmds
 
 
-def _ns(name):
-    return "{}:{}".format(__NAMESPACE__, name) if __NAMESPACE__ else name
+def _namespace():
+    # 피커에 네임스페이스가 지정되지 않았으면 선택한 노드에서,
+    # 그래도 없으면 씬에 컨트롤러 셋이 있는 네임스페이스가 하나뿐일 때 그것을 쓴다.
+    if __NAMESPACE__:
+        return __NAMESPACE__
+    sel = cmds.ls(sl=True) or []
+    if sel:
+        return sel[0].split("|")[-1].rpartition(":")[0]
+    if cmds.ls("*_controllers_grp", type="objectSet"):
+        return ""
+    found = sorted(set(
+        s.rpartition(":")[0] for s in
+        cmds.ls("*:*_controllers_grp", type="objectSet", recursive=True) or []))
+    if len(found) == 1:
+        return found[0]
+    if len(found) > 1:
+        cmds.warning("Anim Picker: several rigs found ({}). Pick the namespace "
+                     "in the picker or select a control of the rig first."
+                     .format(", ".join(found)))
+    return ""
+'''
+
+_GET_ALL_CTLS = _NAMESPACE_FUNC + '''
+
+def _ns(namespace, name):
+    return "{}:{}".format(namespace, name) if namespace else name
 
 
 def _flatten_set(node, seen):
@@ -185,26 +209,28 @@ def _flatten_set(node, seen):
 
 def _all_controls():
     # 1) mGear controller set: <rigName>_controllers_grp (sub-sets flattened)
-    sets = cmds.ls(_ns("*_controllers_grp"), type="objectSet") or []
+    namespace = _namespace()
+    sets = cmds.ls(_ns(namespace, "*_controllers_grp"), type="objectSet") or []
     ctls = []
     seen = set(sets)
     for s in sets:
         ctls += _flatten_set(s, seen)
     # 2) fallback: mGear controls carry an "isCtl" attribute
     if not ctls:
-        ctls = cmds.ls(_ns("*.isCtl"), objectsOnly=True) or []
+        ctls = cmds.ls(_ns(namespace, "*.isCtl"), objectsOnly=True) or []
     # 3) fallback: transforms named *_ctl
     if not ctls:
-        ctls = cmds.ls(_ns("*_ctl"), type="transform") or []
+        ctls = cmds.ls(_ns(namespace, "*_ctl"), type="transform") or []
     if not ctls:
         cmds.warning("Anim Picker: no controls found in namespace '{}'"
-                     .format(__NAMESPACE__ or ""))
+                     .format(namespace))
     return list(dict.fromkeys(ctls))
 '''
 
 _RESET_FUNC = '''
 
 def _reset(nodes):
+    failed = []
     for node in nodes:
         for attr in cmds.listAttr(node, keyable=True, unlocked=True) or []:
             plug = "{}.{}".format(node, attr)
@@ -213,7 +239,10 @@ def _reset(nodes):
                 if default:
                     cmds.setAttr(plug, default[0])
             except Exception:
-                pass
+                failed.append(plug)
+    if failed:
+        cmds.warning("Anim Picker: could not reset {} attributes "
+                     "(connected?): {}".format(len(failed), ", ".join(failed[:10])))
 '''
 
 SCRIPT_SELECT_ALL = _GET_ALL_CTLS + '''
@@ -272,11 +301,12 @@ def script_ikfk(limb, side):
     """mGear anim_utils 의 IK/FK 매칭 (클릭 시 현재 상태의 반대로 전환+매칭)."""
     ik_rot = (',\n        ik_rot="arm_{}_ikRot_ctl"'.format(side)
               if limb == "arm" else "")
-    return '''from mgear.core import anim_utils
+    return _NAMESPACE_FUNC + '''
+from mgear.core import anim_utils
 
 if not __INIT__:
     anim_utils.ikFkMatch_with_namespace(
-        __NAMESPACE__,
+        _namespace(),
         "{limb}_blend",
         "{limb}UI_{s}_ctl",
         ["{limb}_{s}_fk0_ctl", "{limb}_{s}_fk1_ctl", "{limb}_{s}_fk2_ctl"],
@@ -287,8 +317,9 @@ if not __INIT__:
 
 def script_space_switch(ui_host, attr, ctl_name):
     """mGear 스페이스 스위치 (클릭하면 스페이스 목록 팝업)."""
-    return '''from mgear.anim_picker.handlers import action_handlers
-action_handlers.show_space_chage_list(__NAMESPACE__,
+    return _NAMESPACE_FUNC + '''
+from mgear.anim_picker.handlers import action_handlers
+action_handlers.show_space_chage_list(__NAMESPACE__ if __INIT__ else _namespace(),
                                       "{ui}",
                                       "{attr}",
                                       "{ctl}",
