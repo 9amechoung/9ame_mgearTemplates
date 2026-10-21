@@ -19,6 +19,14 @@ mGear 공식 `biped.pkr`과 같은 컨트롤 104개를 다루고, 섹션별 패�
 4. 리그가 레퍼런스(네임스페이스 사용)라면 피커 상단에서 네임스페이스를 선택합니다.
    선택하지 않아도 버튼이 선택한 컨트롤의 네임스페이스를 쓰고, 선택이 없으면 씬에 리그가 하나뿐일 때 그 리그를 자동으로 찾습니다.
 
+> `.pkr`을 `File > Open`/`Import`나 드래그&드롭으로 열면 `performFileAction.mel ... No translator found.` 에러가 납니다
+> (`.pkr`은 Maya 씬이 아닙니다. 드래그&드롭은 최신 mGear에서만 지원). 이때는 스크립트 에디터(Python)에서 바로 불러오세요:
+>
+> ```python
+> PKR_PATH = r"D:/9ame_mgearTemplates/templates/biped_anim_picker.pkr"
+> exec(open(r"D:/9ame_mgearTemplates/tools/load_picker.py", encoding="utf-8").read())
+> ```
+
 ### 구성
 
 **Body 탭**
@@ -71,5 +79,5 @@ python tools/build_biped_picker.py
 ```python
 PKR_PATH = r"D:/9ame_mgearTemplates/templates/biped_anim_picker.pkr"
 NAMESPACE = ""  # 레퍼런스 리그면 네임스페이스 입력
-exec(open(r"D:/9ame_mgearTemplates/tools/check_picker_controls.py").read())
+exec(open(r"D:/9ame_mgearTemplates/tools/check_picker_controls.py", encoding="utf-8").read())
 ```
